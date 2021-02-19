@@ -3,10 +3,12 @@
 //! [`Element`]: ../minidom/element/struct.Element.html
 
 use crate::Error;
-use minidom::{Element, Node};
-use quick_xml::{
-    events::{BytesDecl, BytesEnd, BytesStart, BytesText, Event},
-    Writer,
+use minidom::{
+    quick_xml::{
+        events::{BytesDecl, BytesEnd, BytesStart, BytesText, Event},
+        Writer,
+    },
+    Element, Node,
 };
 use std::io::Write;
 const XML_VERSION: &str = "1.0";
@@ -92,10 +94,10 @@ where
     W: Write,
 {
     fn write_element(&mut self, element: &Element) -> Result<(), Error> {
-        let name = if let Some(prefix) = element.prefix() {
-            format!("{}:{}", prefix, element.name())
+        let name = if element.ns().is_empty() {
+            element.name().to_owned()
         } else {
-            element.name().to_string()
+            format!("{}:{}", element.ns(), element.name())
         };
         let mut start_bytes = BytesStart::borrowed(name.as_bytes(), name.len());
         start_bytes.extend_attributes(element.attrs());
@@ -110,7 +112,6 @@ where
                     let text_bytes = BytesText::from_plain_str(t.as_str());
                     self.writer.write_event(Event::Text(text_bytes))?;
                 }
-                Node::Comment(_) => (),
             }
         }
 
@@ -127,11 +128,11 @@ mod tests {
     use std::io::Cursor;
 
     fn tag() -> Element {
-        let subtag = Element::builder("ns:subtag")
+        let subtag = Element::builder("subtag", "ns")
             .attr("id", "my_subtag")
             .append(Node::Text(String::from("Some text")))
             .build();
-        Element::builder("tag")
+        Element::builder("tag", "")
             .attr("id", "my_tag")
             .append(subtag)
             .build()

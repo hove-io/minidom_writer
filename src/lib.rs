@@ -12,11 +12,11 @@
 //! use minidom_writer::ElementWriter;
 //! use std::io::Cursor;
 //!
-//! let subtag = Element::builder("ns:subtag")
+//! let subtag = Element::builder("subtag", "ns")
 //!     .attr("id", "my_subtag")
 //!     .append(Node::Text(String::from("Some text")))
 //!     .build();
-//! let tag = Element::builder("tag")
+//! let tag = Element::builder("tag", "")
 //!     .attr("id", "my_tag")
 //!     .append(subtag)
 //!     .build();
@@ -46,5 +46,5 @@ pub enum Error {
     /// [`quick-xml`]: ../quick_xml/index.html
     /// [`quick-xml::Error`]: ../quick_xml/enum.Error.html
     #[error("Error writing an XML tag with quick-xml")]
-    WriteEventError(#[from] quick_xml::Error),
+    WriteEventError(#[from] minidom::quick_xml::Error),
 }
