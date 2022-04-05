@@ -1,11 +1,11 @@
 [package]
 name = "minidom_writer"
 version = "1.0.0"
-authors = ["Kisio Digital <team.coretools@kisio.com>"]
+authors = ["Hove <team.coretools@kisio.com>"]
 license = "MIT"
 description = "Helper to write into a std::io::Write a minidom::Element"
-homepage = "https://github.com/CanalTP/minidom_writer"
-repository = "https://github.com/CanalTP/minidom_writer"
+homepage = "https://github.com/hove-io/minidom_writer"
+repository = "https://github.com/hove-io/minidom_writer"
 documentation = "https://docs.rs/minidom_writer"
 edition = "2018"
 readme = "README.md"
